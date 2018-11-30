@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>BFC与margin collapse</title>
+		<style>
+			html,
+		    body,
+		    div {
+		    	padding: 0;
+		    	margin: 0;
+		    }
+			.box-a {
+				background: yellow;
+				height: 50px;
+				margin-bottom: 50px;
+			}
+			.box-b {
+				background: pink;
+				height: 100px;
+				margin-top: 30px;
+			}
+			.wrap {
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box-parent">
+			<div class="box-a">我是box-a</div>
+<!-- 			<div class="wrap"> -->
+				<div class="box-b">我是box-b</div>
+<!-- 			</div> -->
+		</div>
+	</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>行盒</title>
+		<style>
+			h2 {
+				color: #666;
+				font-size: 16px;
+			}
+
+			section {
+				margin-bottom: 80px;
+			}
+
+			.demo1 .contain-box {
+				width: 860px;
+			}
+
+			.demo1 .inline-box1 {
+				background: red;
+			}
+
+			.demo1 .inline-box2 {
+				display: inline-block;
+				padding: 20px 30px;
+				margin: 10px 20px;
+				border: solid 1px #000;
+				background: yellow;
+			}
+
+			.demo1 .inline-box3 {
+				background: green;
+			}
+
+			.demo1 .inline-box4 {
+				background: pink;
+			}
+
+			.demo1 .inline-box5 {
+				background: blue;
+			}
+
+			.demo2 .contain-box {
+				width: 300px;
+				border: solid 1px #000;
+			}
+
+			.demo2 .inline-box{
+				background: yellow;
+				/*word-wrap:break-word;*/
+				/*word-break: break-all;*/
+			}
+
+/*			.demo3 .contain-box {
+				width: 300px;
+				border: solid 1px #000;
+			}*/
+
+			.demo3 .inline-box{
+				background: yellow;
+				padding: 0 20px;
+				border: solid 1px red;
+				margin: 0 20px;
+				word-break: break-all;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="demo1">
+			<h2>1.行盒的高度</h2>
+			<div class="contain-box">
+				<span class="inline-box1">inline-box1====</span>
+				<span class="inline-box2">inline-box2====</span>
+				<span class="inline-box3">inline-box3====</span>
+				<span class="inline-box4">inline-box4====</span>
+				<span class="inline-box5">inline-box5啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊阿</span>
+				<img src="./luffy.png">
+			</div>
+		</section>
+
+		<section class="demo2">
+			<h2>2.溢出行盒</h2>
+			<div class="contain-box">
+				<span class="inline-box">inline-box566666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊阿</span>
+			</div>
+		</section>
+
+		<section class="demo3">
+			<h2>3.内联盒分割</h2>
+			<div class="contain-box">
+				<span class="inline-box">inline-box566666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊阿</span>
+			</div>
+		</section>
+	</body>
+</html>

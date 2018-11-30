@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <title>基于Promise的异步自动流程管理</title>
+</head>
+
+<body>
+    <script>
+        // 业务的异步代码
+        function* task() {
+            var value1 = yield ajax('a.php', 2000);
+            // 获得异步请求后的值，此处可以编写一系列的业务处理逻辑，然后执行下一个异步请求
+            console.log(value1);
+            var value2 = yield ajax('b.php', 1000);
+            console.log(value2);
+            var value3 = yield ajax('c.php', 1500);
+            console.log(value3);
+            return value3
+        }
+
+        // 自动化执行器
+        function runner(gen) {
+            var args = [].slice.call(arguments, 1),
+                it;
+
+            // 在当前上下文初始化生成器
+            it = gen.apply(this, args);
+
+            // 返回一个promise用于生成器完成
+            return Promise.resolve()
+                .then(function handleNext(value) {
+                    // 对下一个yield出来的值运行
+                    var next = it.next(value);
+
+                    return (function handleResult(next) {
+                        // 判断生成器是否运行完毕?
+                        if (next.done) {
+                            return next.value;
+                        } else {
+                            return Promise.resolve(next.value)
+                                .then(
+                                    // 成功就恢复异步循环,把决议的值发回生成器
+                                    handleNext,
+
+                                    // 如果是value被拒绝的Promise,就把错误传回生成器进行出错处理
+                                    function handleErr(err) {
+                                        return Promise.resolve(
+                                                it.throw(err)
+                                            )
+                                            .then(handleResult);
+                                    }
+                                );
+                        }
+                    })(next);
+                });
+        }
+
+        function ajax(url, delay, err) {
+            var data = 'this is data for' + url;
+            return new Promise(function(resolve, reject) {
+                // 模拟ajax请求
+                setTimeout(function() {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                }, delay || 1000)
+            })
+        }
+
+        // var p = runner(task).then(
+        //     data => console.log('this is data', data),
+        //     err => console.log('this is err', err)
+        // );
+    </script>
+</body>
+
+</html>

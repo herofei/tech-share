@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <title>Generator的异步操作同步化</title>
+</head>
+
+<body>
+    <script>
+        function* main() {
+            var result = yield request(3000);
+            // do something
+            console.log(result);
+        }
+
+        function request(time) {
+            console.log('I am requesting, please wait!');
+            // 模拟异步请求
+            setTimeout(function() {
+                var data = 'done';
+                it.next(data);
+                // 出错的时候,将异步错误抛出
+                // var err = new Error('someting wrong happened!')
+                // it.throw(err);
+            }, time || 2000)
+        }
+
+        var it = main();
+        it.next();
+    </script>
+</body>
+
+</html>

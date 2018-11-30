@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>rx.js</title>
+</head>
+
+<body>
+    <button id="button">点击触发</button>
+    <input id="todo" type="text" />
+    <script src="./Rx.min.js"></script>
+    <script>
+        var button = document.querySelector('button');
+        var button$ = Rx.Observable.fromEvent(button, 'click');
+        //     .scan(count => count + 1, 0)
+        //     .map(count => count * 10)
+        //     .subscribe(count => console.log(`Clicked ${count} times`));
+
+
+        let todo = document.getElementById('todo');
+        let input$ = Rx.Observable.fromEvent(todo, 'keyup');
+        // input$.subscribe(input => console.log(input.target.value));
+
+        // input$
+        //     .pluck('target', 'value')
+        //     .subscribe(value => console.log(value));
+
+        Rx.Observable.combineLatest(button$, input$, (ev, input) => {
+                return {
+                    ev: ev,
+                    input: input
+                }
+            })
+            .subscribe(value => console.log(value))
+    </script>
+</body>
+
+</html>

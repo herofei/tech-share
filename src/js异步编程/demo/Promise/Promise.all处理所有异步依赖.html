@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Promise.all处理所有异步依赖</title>
+    </head>
+    <body>
+        <script>
+        /**
+         *Promise.all
+         *当返回值都是resolve(fulfilled)状态情况下，返回值会以数组的形式传入resolve回调中
+         *当异步数组中存在reject(rejected)状态的情况下，返回值则是相关的err值，只传入第一个返回err的值
+         **/
+        function foo(delay) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    console.log('foo end!')
+                    resolve(delay);
+                }, delay)
+            });
+        }
+
+        function bar(delay) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    console.log('bar end!')
+                    reject('err' + delay);
+                }, delay)
+            });
+        }
+
+        Promise.all([foo(500), bar(1000)])
+            .then(function(v) {
+                console.log(v);
+            }, function(err) {
+                console.log(err);
+            });
+        </script>
+    </body>
+</html>

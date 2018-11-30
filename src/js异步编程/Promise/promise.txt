@@ -1,0 +1,143 @@
+提纲：
+
+1.对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态。这也是Promise这个名字的由来，它的英语意思就是“承诺”，表示其他手段无法改变。
+
+2.一旦状态改变，就不会再变，任何时候都可以得到这个结果。Promise对象的状态改变，只有两种可能：从pending变为fulfilled和从pending变为rejected。只要这两种情况发生，状态就凝固了，不会再变了，会一直保持这个结果，这时就称为 resolved（已定型）。如果改变已经发生了，你再对Promise对象添加回调函数，也会立即得到这个结果。这与事件（Event）完全不同，事件的特点是，如果你错过了它，再去监听，是得不到结果的
+
+3.promise内部若是有程序错误,promise还是会抛出错误,但是并不会阻止外部程序的执行。这就是说，Promise 内部的错误不会影响到 Promise 外部的代码，通俗的说法就是“Promise 会吃掉错误”。
+
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    // 下面一行会报错，因为x没有声明
+    resolve(x + 2);
+  });
+};
+
+testErr().then(v => console.log('resolve!!'));
+
+console.log('22222');
+
+// 222222
+// Uncaught (in promise) ReferenceError: x is not defined  ==>而且错误在后面代码执行完之后才抛出,所以说明是异步抛出错误
+
+
+若是有reject函数或者catch方法，则会捕获之前的程序错误
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    // 下面一行会报错，因为x没有声明
+    resolve(x + 2);
+  });
+};
+
+testErr().then(
+    v => console.log('resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+console.log('22222');
+
+// 222222
+// the ErrUncaught (in promise) ReferenceError: x is not defined ===>捕获到的错误
+
+2.如果promise已经决议，则后面的决议都会无效，后面的抛出错误以及错误程序导致的错误都会无效。但正常的同步程序会继续执行。
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    resolve(2);
+    //程序会照常执行
+    console.log('hello');
+  });
+};
+
+testErr().then(
+    v => console.log(v + 'resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+// hello
+// 2resolve!!
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    resolve(2);
+    //后面的决议会被抛弃
+    reject(333);
+  });
+};
+
+testErr().then(
+    v => console.log(v + 'resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+// 2resolve!!
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    resolve(2);
+    //后面抛出的错误会被抛弃
+    throw new Error('this is error!');
+  });
+};
+
+testErr().then(
+    v => console.log(v + 'resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+// 2resolve!!
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    resolve(2);
+    // 下一行是错误程序,x未定义,后面的程序错误会被抛弃
+    x + 2;
+  });
+};
+
+testErr().then(
+    v => console.log(v + 'resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+// 2resolve!!
+
+let testErr = function() {
+  return new Promise(function(resolve, reject) {
+    resolve(2);
+    // 下一行是错误程序,后面的程序错误会被抛弃
+    setTimeout(function() {
+        x + 2;
+    }, 0)
+  });
+};
+
+testErr().then(
+    v => console.log(v + 'resolve!!'),
+    err => console.log('the Err' + err)
+);
+
+// 2resolve!!
+// Uncaught ReferenceError: x is not defined   ==>异步里面的错误还是会被抛出
+
+
+
+参考文献：
+promise规范(英): https://promisesaplus.com/
+promise规范(译): http://www.ituring.com.cn/article/66566
+MDN: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
+大话Promise: http://www.cnblogs.com/lvdabao/p/jquery-deferred.html
+Promise实现：https://zhuanlan.zhihu.com/p/21834559
+ECMA262-Promise：http://www.ecma-international.org/ecma-262/8.0/index.html#sec-promise-constructor
+ES6入门：http://es6.ruanyifeng.com/#docs/promise
+Promise实现2: https://mondogao.github.io/2017/04/28/ecma-2015-promise.html
+You-Dont-Know-JS:  https://github.com/getify/You-Dont-Know-JS
+
+
+特点：
+3.穿透性
+4.错误无法
+
+
+

@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <title>promise</title>
+</head>
+
+<body>
+    <script>
+        /**
+         *promise超时
+         **/
+        // function timeoutPromise(delay) {
+        //     return new Promise(function(resolve, reject) {
+        //         setTimeout(function() {
+        //             reject('timeout!!!');
+        //         }, delay);
+        //     });
+        // }
+
+        // function foo(delay) {
+        //     return new Promise(function(resolve, reject) {
+        //         setTimeout(function() {
+        //             console.log('foo end!')
+        //             resolve(delay);
+        //         }, delay)
+        //     });
+        // }
+
+        // Promise.race([foo(2000), timeoutPromise(3000)])
+        //     .then(function(v) {
+        //         console.log('resolve', v);
+        //     }, function(err) {
+        //         console.log('reject', err);
+        //     })
+
+        /**
+         *链式流
+         **/
+        // var p1 = Promise.resolve(20);
+        // var p2 = p1.then(function(v) {
+        //     console.log(v);
+        //     return v * 2;
+        // });
+        // var p3 = p2.then(function(v) {
+        //     console.log(v);
+        // })
+
+        // var p = Promise.resolve(21)
+        //     .then(function(v) {
+        //         console.log(v);
+        //         return new Promise(function(resolve, reject) {
+        //             resolve(v * 2);
+        //         });
+        //     })
+        //     .then(function(v) {
+        //         console.log(v);
+        //     })
+
+        // var pt = Promise.resolve(22)
+        //     .then(function(v) {
+        //         console.log(v);
+        //         return new Promise(function(resolve, reject) {
+        //             setTimeout(function() {
+        //                 resolve(v * 2)
+        //             }, 1000);
+        //         });
+        //     })
+        //     .then(function(v) {
+        //         console.log(v);
+        //     })
+
+        /**
+         *Promise.all
+         *当返回值都是resolve(fulfilled)状态情况下，返回值会以数组的形式传入resolve回调中
+         *当异步数组中存在reject(rejected)状态的情况下，返回值则是相关的err值，只传入第一个返回err的值
+         **/
+        // function foo1(delay) {
+        //     return new Promise(function(resolve, reject) {
+        //         setTimeout(function() {
+        //             console.log('foo1 end!')
+        //             resolve(delay);
+        //         }, delay)
+        //     });
+        // }
+
+        // function bar1(delay) {
+        //     return new Promise(function(resolve, reject) {
+        //         setTimeout(function() {
+        //             console.log('bar1 end!')
+        //             reject('err' + delay);
+        //         }, delay)
+        //     });
+        // }
+
+        // Promise.all([foo1(500), bar1(1000)])
+        //     .then(function(v) {
+        //         console.log(v);
+        //     }, function(err) {
+        //         console.log(err);
+        //     });
+
+        /**
+         *prmise错误处理
+         **/
+        var pe = Promise.resolve(23);
+        pe.then(function(v) {
+                console.log('fulfilled1', v);
+                //由于数字没有toLowerCase方法，此处会抛出错误
+                v.toLowerCase();
+            }, function(err) {
+                console.log('err1', err);
+            })
+            .then(function(v) {
+                console.log('fulfilled2', v);
+            }, function(err) {
+                console.log('err2', err);
+            })
+    </script>
+</body>
+
+</html>

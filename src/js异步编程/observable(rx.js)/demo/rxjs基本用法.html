@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>rx.js基本用法</title>
+</head>
+
+<body>
+    <button id="button">点击触发</button>
+    <script src="./Rx.min.js"></script>
+    <script>
+        /*
+         * demo1 rx.js处理dom数据流
+         */
+        var button = document.querySelector('button');
+        var button$ = Rx.Observable.fromEvent(button, 'click')
+            .scan(count => count + 1, 0)
+            // .throttleTime(3000)
+            .map(count => count * 10)
+            .subscribe(count => console.log(`Clicked ${count} times`));
+
+        // 取消订阅
+        // button$.unsubscribe();
+
+        /*
+         * demo2 Observable.from
+         */
+        // var Observable2 = Rx.Observable.from(['a', 'b', 'c']);
+        // var Subscription = Observable.subscribe({
+        //     next: v => console.log('value is : ' + v)
+        // })
+
+        /*
+         * demo3 Rx.Observable.create方法生成Observable
+         */
+        var observable3 = Rx.Observable.create(observer => {
+            let i = 0;
+            var intervalId = setInterval(() => {
+                observer.next(i++);
+            }, 500);
+            return function unsubscribe() {
+                clearInterval(intervalId);
+            }
+        })
+        var subscription3 = observable3.subscribe({
+            next: x => console.log(`Observer got a next value: ${x}`),
+            error: err => console.log(`Observer got an error:  ${JSON.stringify(err)}`)
+        });
+
+        // 取消订阅
+        // setTimeout(() => {
+        //     subscription3.unsubscribe();
+        // }, 2100);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>Generator的自动流程管理</title>
+</head>
+
+<body>
+    <script>
+        function* task(value1) {
+            try {
+                var value2 = yield step1(value1);
+                console.log(value2);
+                var value3 = yield step2(value2);
+                console.log(value3);
+                var value4 = yield step3(value3);
+                console.log(value4);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        var it = task('start!');
+
+        function step1(v) {
+            return v + 'step1 done!';
+        }
+
+        function step2(v) {
+            return v + 'step2 done!';
+        }
+
+        // 将step2修改成异步执行
+        // function step2(v) {
+        //     setTimeout(function() {
+        //         console.log(v + 'step2 done!')
+        //     }, 2000)
+        // }
+
+        function step3(v) {
+            return v + 'step3 done!';
+        }
+
+        function runner(task) {
+            var taskObj = task.next(task.value);
+            // 如果Generator函数未结束，就继续调用
+            if (!taskObj.done) {
+                task.value = taskObj.value;
+                runner(task);
+            }
+        }
+
+        // runner(it);
+    </script>
+</body>
+
+</html>

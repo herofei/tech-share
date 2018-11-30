@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>不经意间触发层叠上下文导致的bug</title>
+    <style>
+        .list {
+            list-style: none;
+        }
+
+        .list li {
+            position: relative;
+            height: 100px;
+            margin-top: 30px;
+            background: yellow;
+            /*opacity: .9;*/
+        }
+
+        .list li:hover{
+            /*z-index: 1;
+            transform: translate(-10px,-10px);*/
+/*            position: fixed;*/
+        }
+
+        .trigger {
+            width: 30px;
+            height: 30px;
+            background: #ff6060;
+        }
+
+        .pop {
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            width: 100px;
+            height: 200px;
+            background: green;
+            z-index: 10;
+        }
+
+        .trigger:hover .pop {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <ul class="list">
+        <li>
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+        <li class="td1">
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+        <li>
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+        <li>
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+        <li>
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+        <li>
+            <div class="trigger">
+                <div class="pop"></div>
+            </div>
+        </li>
+    </ul>
+</body>
+</html>

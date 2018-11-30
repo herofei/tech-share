@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>rx.js异步处理</title>
+</head>
+
+<body>
+    <script src="./Rx.min.js"></script>
+    <script>
+        /*
+         * demo1 基本异步处理
+         */
+
+        // 模拟异步请求
+        var ajax = function(obj, time) {
+            return setTimeout(function() {
+                // 输出value
+                obj.success('aaa')
+                    // 输出错误
+                    // obj.err('this is a error!!!!');
+            }, time || 2000);
+        }
+
+
+        var observable1 = Rx.Observable.create(observer => {
+            var timer = ajax({
+                success: v => observer.next(v),
+                err: err => observer.error(err)
+            })
+
+            return function unsubscribe() {
+                clearInterval(timer);
+            }
+        })
+
+        var subscription1 = observable1.subscribe({
+            next: x => console.log(`Observer got a next value: ${x}`),
+            error: err => console.log(`Observer got an error:  ${JSON.stringify(err)}`)
+        });
+
+        // 取消订阅
+        // setTimeout(() => {
+        //     subscription1.unsubscribe();
+        // }, 1100);
+
+
+        /*
+         * demo2 异步链式调用
+         */
+        // var i = 0;
+        // var ajax = function(obj, time) {
+        //     return setTimeout(function() {
+        //         // 输出value
+        //         obj.success(`aaa${i++}`)
+        //             // 输出错误
+        //             // obj.err('this is a error!!!!');
+        //     }, time || 2000);
+        // }
+
+        // var observable2 = Rx.Observable.create(observer => {
+        //     var timer1 = ajax({
+        //         success: v => observer.next(v),
+        //         err: err => observer.error(err)
+        //     })
+
+        //     return function unsubscribe() {
+        //         clearInterval(timer1);
+        //     }
+        // })
+
+        // function mergeObservable(data) {
+        //     // debugger;
+        //     var observable3 = Rx.Observable.create(observer => {
+        //         var timer2 = ajax({
+        //             success: v => observer.next(v + data),
+        //             err: err => observer.error(err)
+        //         })
+
+        //         return function unsubscribe() {
+        //             clearInterval(timer2);
+        //         }
+        //     });
+        //     return observable3;
+        // }
+
+
+
+        // var subscription2 = observable2
+        //     .mergeMap(value => mergeObservable(value))
+        //     .subscribe({
+        //         next: x => console.log(`Observer got a next value: ${x}`),
+        //         error: err => console.log(`Observer got an error:  ${JSON.stringify(err)}`)
+        //     });
+
+        // 取消订阅
+        // 如果取消订阅,此时是调用observable2返回的取消订阅方法还是observable3的取消订阅方法呢？
+        // 答案是：当observable2没运行完时，则调用的是observable2的取消订阅方法。
+        //        若此时observable2已运行完，observable3运行中，则先会调用observable2的取消订阅方法，再调用observable3的取消订阅方法
+        // subscription1.unsubscribe();
+
+
+        /*
+         * demo3 用rx.js实现Promise.all功能
+         */
+        // var i = 0;
+        // var ajax = function(obj, time) {
+        //     return setTimeout(function() {
+        //         // 输出value
+        //         obj.success(`aaa${i++}`)
+        //             // 输出错误
+        //             // obj.err('this is a error!!!!');
+        //     }, time || 2000);
+        // }
+
+        // var observable4 = Rx.Observable.create(observer => {
+        //     var timer1 = ajax({
+        //         success: v => {
+        //             observer.next(v);
+        //             observer.complete();
+        //         },
+        //         err: err => observer.error(err)
+        //     }, 1000)
+
+        //     return function unsubscribe() {
+        //         clearInterval(timer1);
+        //     }
+        // })
+
+        // var observable5 = Rx.Observable.create(observer => {
+        //     var timer2 = ajax({
+        //         success: v => {
+        //             observer.next(v);
+        //             observer.complete();
+        //         },
+        //         err: err => observer.error(err)
+        //     }, 3000)
+
+        //     return function unsubscribe() {
+        //         clearInterval(timer2);
+        //     }
+        // });
+
+        // Rx.Observable.forkJoin(observable4, observable5)
+        //     .subscribe({
+        //         next: results => console.log(`next data is ${results}`),
+        //         error: err => console.log(`the error is ${err}`),
+        //         complete: () => console.log(`It is completed`)
+        //     });
+    </script>
+</body>
+
+</html>

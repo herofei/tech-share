@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Promise决议的唯一性</title>
+    </head>
+    <body>
+        <script>
+            /**
+             *  demo1
+             **/
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     resolve(2);
+            //     //程序会照常执行
+            //     console.log('hello');
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log(v + 'resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // hello
+            // 2resolve!!
+
+
+            /**
+             *  demo2
+             **/
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     resolve(2);
+            //     //后面的决议会被抛弃
+            //     reject(333);
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log(v + 'resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // // 2resolve!!
+
+
+            /**
+             *  demo3
+             **/
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     resolve(2);
+            //     //后面抛出的错误会被抛弃
+            //     throw new Error('this is error!');
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log(v + 'resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // // 2resolve!!
+
+
+            /**
+             *  demo4
+             **/
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     resolve(2);
+            //     // 下一行是错误程序,x未定义,后面的程序错误会被抛弃
+            //     x + 2;
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log(v + 'resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // // 2resolve!!
+
+            /**
+             *  demo5
+             **/
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     resolve(2);
+            //     // 下一行是异步错误程序,异步程序错误还是会被抛出
+            //     setTimeout(function() {
+            //         x + 2;
+            //     }, 0)
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log(v + 'resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // 2resolve!!
+            // Uncaught ReferenceError: x is not defined   ==>异步里面的错误还是会被抛出
+
+            new Promise(function(resolve, reject) {
+                resolve(true);
+                // 下一行是异步错误程序,异步程序错误还是会被抛出
+                setTimeout(function() {
+
+                    x += 2;
+                })
+            });
+
+            // new Promise(function(resolve, reject) {
+            //     Ext.jsonRequest({
+            //         url: '',
+            //         success: function(data) {
+            //             resolve(data)
+            //         }
+            //     })
+            // }).then(
+            //     data => {
+            //         return new Promise(function(resolve, reject) {
+            //             Ext.jsonRequest({
+            //             url: '',
+            //             success: function(value) {
+            //                     resolve([data,value]])
+            //                 }
+            //             })
+            //         })
+            //     }
+            // ).then(
+            //     data => {
+
+            //     }
+            // )
+        </script>
+    </body>
+</html>

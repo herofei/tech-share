@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>z-index</title>
+		<style>
+			body {
+				padding-top: 200px;
+				color: #333;
+			}
+			.a,
+			.b{
+				position: relative;
+				width: 200px;
+				height: 100px;
+				z-index:1;
+			}
+			.a1,
+			.b1 {
+				position: absolute;
+				width: 100px;
+				height: 200px;
+			}
+			.a {
+				background: green;
+				/*z-index: auto;*/
+			}
+			.b {
+				background: blue;
+			}
+			.a1 {
+				left: 10px;
+				top: 50px;
+				z-index: 9999;
+				background: yellow;
+			}
+			.b1 {
+				right: 10px;
+				bottom: 50px;
+				position: absolute;
+				z-index: -1;
+				background: orange;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="a">
+			a
+			<div class="a1">a1</div>
+		</div>
+		<div class="b">
+			b
+			<div class="b1">b1</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+rx.js:
+怎么理解rx.js：https://www.zhihu.com/question/48615787/answer/111909696
+实现一个简单的Observable：https://zhuanlan.zhihu.com/p/27776484
+Observable VS Promise： https://juejin.im/entry/595e161c51882568af7f2bd6/
+不要把Rx用成Promise： https://zhuanlan.zhihu.com/p/20531896
+Angular2 之 Promise vs Observable： https://www.jianshu.com/p/50d5e89879e4
+rx.js概览与入门：http://cn.rx.js.org/manual/overview.html
+rx.js相关资源：https://zhuanlan.zhihu.com/p/27721834
+学习rx.js：https://rxjs-cn.github.io/learn-rxjs-operators/
+学习rx.js操作符：https://rxjs-cn.github.io/rxjs5-ultimate-cn/content/observable-wrapping.html
+TC39关于Observable的相关描述：https://github.com/tc39/proposals
+
+rx.js处理异步：https://segmentfault.com/a/1190000010088631
+
+rx.js小结：https://zhuanlan.zhihu.com/p/25559084
+
+
+非常容易理解的Rxjs教程：https://www.jianshu.com/p/869a3f74d3ca
+老外写的rxjs教程(译文)：https://zhuanlan.zhihu.com/p/25552305
+
+1.什么是Rx.js
+    RxJS是Observable的js实现以及扩展，是一个通过使用可观察序列来处理异步事件流的库。它基于核心类型Observable和一系列操
+    作符及方法，使得我们能更好地处理异步事件流。
+
+
+2.什么是Observable
+    Observable是个异步处理方案,目前在ECMAScript proposals中处于stage 1。
+
+3.Observable基本api以及基本用法
+    官方提案中的API很少,目前只有3个：
+
+    原型方法：
+    Observable.prototype.subscribe(): 进行事件订阅
+
+    // Subscribes to the sequence with an observer
+    subscribe(observer : Observer) : Subscription;
+
+    // Subscribes to the sequence with callbacks
+    subscribe(onNext : Function,
+                onError? : Function,
+                onComplete? : Function) : Subscription;
+
+    静态方法：
+    Observable.of(...items): Converts items to an Observable, return Observable
+    Observable.from(observable): Converts an observable or iterable to an Observable, return Observable
+
+    基本用法请看demo
+
+4.什么是Observer
+    Observer(观察者)是由 Observable 发送的值的消费者。观察者只是一组回调函数的集合，每个回调函数对应一种 Observable 发送的通知类型：next、error 和 complete.
+    下面的示例是一个典型的观察者对象：
+    var observer = {
+    next: x => console.log('Observer got a next value: ' + x),
+    error: err => console.error('Observer got an error: ' + err),
+    complete: () => console.log('Observer got a complete notification'),
+    };
+
+    要使用观察者，需要把它提供给 Observable 的 subscribe 方法
+    observable.subscribe(observer)
+
+    RxJS 中的观察者也可能是部分的。如果你没有提供某个回调函数，Observable 的执行也会正常运行，只是某些通知类型会被忽略，因为观察者中没有没有相对应的回调函数。
+
+    下面的示例是没有 complete 回调函数的观察者：
+    var observer = {
+    next: x => console.log('Observer got a next value: ' + x),
+    error: err => console.error('Observer got an error: ' + err),
+    };
+
+
+    在 observable.subscribe 内部，它会创建一个观察者对象并使用第一个回调函数参数作为 next 的处理方法。所有三种类型的回调函数都可以直接作为参数来提供：
+    observable.subscribe(
+    x => console.log('Observer got a next value: ' + x),
+    err => console.error('Observer got an error: ' + err),
+    () => console.log('Observer got a complete notification')
+    );
+
+5.什么是Subscription
+    Subscription 是表示可清理资源的对象，通常是 Observable 的执行。Subscription 有一个重要的方法，即 unsubscribe，它不需要任何参数，只是用来清理由 Subscription 占用的资源。
+    var observable = Rx.Observable.interval(1000);
+    var subscription = observable.subscribe(x => console.log(x));
+    // 通过from、of、interval等针对特定类型生成Observable的方法会返回个自带取消订阅方法(unsubscribe)的Subscription
+    subscription.unsubscribe();
+
+
+    如果是通过create() 方法创建 Observable 时，Observable 必须定义如何清理执行的资源。你可以通过在 function subscribe() 中返回一个自定义的 unsubscribe 函数。
+    var observable = Rx.Observable.create(function subscribe(observer) {
+        // 追踪 interval 资源
+        var intervalID = setInterval(() => {
+            observer.next('hi');
+        }, 1000);
+
+        // 提供取消和清理 interval 资源的方法
+        return function unsubscribe() {
+            clearInterval(intervalID);
+        };
+    });
+
+    var subscription  = observable.subscribe(
+        (v) => console.log('Observer got a next value: ' + x)
+    );
+
+    subscription.unsubscribe();
+
+6.Observable的异步操作
+    详看demo
+
+
+
+7.Observable vs Promise
+   rx.js中的Observable可以看成是一个升级版的Promise,但Observable不遵循Promise/A+规范，故与Promise不兼容。但可以通过操作符Rx.Observable.fromPromise将Promise对象转换成Observable对象。
+   Observable相对于Promise的优点：
+   1.可以中途取消订阅，而Promise则无法中途取消
+   2.能输出多值，Promise只能决议一次
+   3.可以重试，设置回播订阅前的值
+
+
+   通过Rx.js一系列操作符，使得Observable无比强大，可以控制数据流输出频率，迭代数据流，合并多个数据流等。

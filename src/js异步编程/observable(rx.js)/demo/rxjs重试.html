@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>rx.js重试功能</title>
+</head>
+
+<body>
+    <script src="./Rx.min.js"></script>
+    <script>
+        /*
+         * demo1 用rx.js实现重试功能
+         */
+        var i = 0;
+        var ajax = function(obj, time) {
+            return setTimeout(function() {
+                if (i < 3) {
+                    // 输出错误
+                    obj.err(`this is a error${i++}!!!!`);
+                } else {
+                    // 输出value
+                    obj.success(`aaa${i++}`)
+                }
+            }, time || 2000);
+        }
+
+        var observable = Rx.Observable.create(observer => {
+            var timer = ajax({
+                success: v => {
+                    observer.next(v);
+                    observer.complete();
+                },
+                err: err => observer.error(err)
+            }, 1000)
+
+            return function unsubscribe() {
+                clearInterval(timer);
+            }
+        })
+
+        // observable.prototype.retry
+        // 返回一个 Observable， 该 Observable 是源 Observable 不包含错误异常的镜像。
+        // 如果源 Observable 发生错误, 这个方法不会传播错误而是会不 断的重新订阅源 Observable 直到达到最大重试次数 (由数字参数指定)
+        observable.retry(5)
+            .subscribe({
+                next: results => console.log(`next data is ${results}`),
+                error: err => console.log(`the error is ${err}`),
+                complete: () => console.log(`It is completed`)
+            });
+    </script>
+</body>
+
+</html>

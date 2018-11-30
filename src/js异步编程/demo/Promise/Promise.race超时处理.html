@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Promise.race超时处理</title>
+    </head>
+    <body>
+        <script>
+        /**
+         *promise超时
+         **/
+        function timeoutPromise(delay) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    reject('timeout!!!');
+                }, delay);
+            });
+        }
+
+        function foo(delay) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    console.log('foo end!')
+                    resolve(delay);
+                }, delay)
+            });
+        }
+
+        Promise.race([foo(2000), timeoutPromise(3000)])
+            .then(function(v) {
+                console.log('resolve', v);
+            }, function(err) {
+                console.log('reject', err);
+            })
+        </script>
+    </body>
+</html>

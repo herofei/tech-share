@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <title>基于thunk函数的异步自动流程管理</title>
+</head>
+
+<body>
+    <script>
+        // thunk转化函数
+        var thunk = function(fn) {
+            return function() {
+                var args = Array.prototype.slice.call(arguments);
+                return function(callback) {
+                    args.push(callback);
+                    return fn.apply(this, args);
+                }
+            };
+        };
+
+        // 业务的异步代码
+        function* task() {
+            try {
+                var value1 = yield thunkStep1;
+                console.log(value1);
+                var value2 = yield thunkStep2;
+                console.log(value2);
+                var value3 = yield thunkStep3;
+                console.log(value3);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        // 自动化执行器
+        function runner(fn, initValue) {
+            var gen = fn(initValue);
+
+            function next(err, data) {
+                var result;
+
+                if (err) {
+                    // 若有错误，则抛出相应错误
+                    gen.throw(err);
+                } else {
+                    // 返回 { value: thunk函数, done: ... }
+                    result = gen.next(data);
+                }
+
+                if (result.done) {
+                    // 若是done为true，则返回
+                    return;
+                }
+
+                // result.value 是一个 thunk函数，需要一个 callback 函数作为参数，将next作为callback传入
+                result.value(next);
+            }
+
+            next();
+        }
+
+        function ajax(url, delay, callback) {
+            // 模拟ajax请求
+            var err = null;
+            var data = 'this is data for' + url;
+            setTimeout(function() {
+                callback(err, data);
+            }, delay || 1000)
+        }
+
+        var thunkStep1 = thunk(ajax)('a.php', 2000);
+        var thunkStep2 = thunk(ajax)('b.php', null);
+        var thunkStep3 = thunk(ajax)('c.php', 1500);
+
+        // runner(task);
+    </script>
+</body>
+
+</html>

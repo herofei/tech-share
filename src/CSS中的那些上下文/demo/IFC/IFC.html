@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>行内格式化上下文</title>
+		<style>
+			h2 {
+				color: #666;
+				font-size: 16px;
+			}
+
+			section {
+				margin-bottom: 80px;
+			}
+
+			.demo1 .inline-box1 {
+				background: red;
+			}
+
+			.demo1 .inline-box2 {
+				background: yellow;
+			}
+
+			.demo1 .inline-box3 {
+				background: green;
+			}
+
+			.demo1 .inline-box4 {
+				background: pink;
+			}
+
+			.demo2 .inline-box1,
+			.demo2 .block-box {
+				margin: 10px 20px;
+				padding: 10px 20px;
+				border: solid 1px red;
+				background: yellow;
+			}
+
+			.demo3 .float-box{
+				float: left;
+				background: orange;
+			}
+
+			.demo3 .inline-box {
+				word-break: break-all;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="demo1">
+			<h2>1.在一个内联格式化上下文中，盒子会从包含块的顶部开始，一个接一个地水平摆放</h2>
+			<div>
+				<span class="inline-box1">inline-box1====</span>
+				<span class="inline-box2">inline-box2====</span>
+				<span class="inline-box3">inline-box3====</span>
+				<span class="inline-box4">inline-box4====</span>
+			</div>
+		</section>
+		<section class="demo2">
+			<h2>2.水平margin，border和padding，垂直margin，border和padding并不占空间(inline-block、inline-table及可替换元素除外)</h2>
+			<div>
+				<div>block-box1===========================</div>
+				<span class="inline-box1">inline-box1=========================</span>
+				<span class="inline-box2">inline-box2=========================</span>
+				<div>block-box2==============================</div>
+			</div>
+			<div style="margin-top:30px;">
+				<div>block-box1===========================</div>
+				<div class="block-box">inline-box1=========================</div>
+				<div>block-box2==============================</div>
+			</div>
+		</section>
+		<section class="demo3">
+			<h2>3.行盒（line box）的宽度是由包含块和存在的浮动来决定。</h2>
+			<div>
+				<img src="./line-box.png">
+			</div>
+			<div style="overflow:hidden;">
+				<div class="float-box">this is a float box</div>
+				<span class="inline-box">inline-box66666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666</span>
+			</div>
+		</section>
+
+	</body>
+</html>

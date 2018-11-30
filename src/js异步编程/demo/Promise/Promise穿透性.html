@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Promise穿透性</title>
+    </head>
+    <body>
+        <script>
+            // 8会穿透到最后
+            new Promise(resolve=>resolve(8))
+            .then()
+            .catch()
+            .then(function(value) {
+                console.log(value)
+            })
+            // 但是若是中间有then或者catch加了回调函数,穿透就会停止,因为在非严格模式下,function会返回undefined
+        </script>
+    </body>
+</html>

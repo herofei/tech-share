@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>链式流</title>
+    </head>
+    <body>
+        <script>
+            /**
+         *链式流
+         **/
+        var p = Promise.resolve(22)
+            .then(function(v) {
+                console.log(v);
+                return new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        //resolve(v * 2)
+                        reject(v)
+                    }, 1000);
+                });
+            })
+            .then(function(v) {
+                console.log(v);
+                return v * 3;
+            },
+                err => console.log('err1' + err)
+            )
+            .then(function(v) {
+                console.log(v);
+            },
+                err => console.log('err2' + err)
+            )
+        </script>
+    </body>
+</html>

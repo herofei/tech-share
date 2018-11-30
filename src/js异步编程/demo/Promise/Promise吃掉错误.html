@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Promise吃掉错误</title>
+    </head>
+    <body>
+        <script>
+
+            /**
+             *  demo1
+             **/
+            let testErr = function() {
+              return new Promise(function(resolve, reject) {
+                // 下面一行会报错，因为x没有声明
+                resolve(x + 2);
+              });
+            };
+
+            testErr().then(
+                v => console.log('resolve!!')
+            )
+
+            console.log('22222');
+
+            // 222222
+            // Uncaught (in promise) ReferenceError: x is not defined  ==>而且错误在后面代码执行完之后才抛出,所以说明是异步抛出错误
+
+
+            /**
+             *  demo2
+             **/
+            // 若是有reject函数或者catch方法，则会捕获之前的程序错误
+            // let testErr = function() {
+            //   return new Promise(function(resolve, reject) {
+            //     // 下面一行会报错，因为x没有声明
+            //     resolve(x + 2);
+            //   });
+            // };
+
+            // testErr().then(
+            //     v => console.log('resolve!!'),
+            //     err => console.log('the Err' + err)
+            // );
+
+            // console.log('22222');
+
+            // 222222
+            // the ErrUncaught (in promise) ReferenceError: x is not defined ===>捕获到的错误
+        </script>
+    </body>
+</html>
